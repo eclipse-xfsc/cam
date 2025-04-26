@@ -1,0 +1,118 @@
+[
+  {
+    "id": "SystemComponentsIntegrity",
+    "name": "SystemComponentsIntegrity",
+    "description": "This metric is used to assess whether the deployed system components were started without modifications",
+    "scale": 1,
+    "allowedValues": {
+      "values": [
+        false,
+        true
+      ]
+    },
+    "interval": 300
+  },
+  {
+    "id": "CyberSecurityCertification",
+    "name": "CyberSecurityCertification",
+    "description": "This metric is used to assess if the service provider or service holds a valid cyber security certification, such as ISO 27001.",
+    "scale": 1,
+    "allowedValues": {
+      "values": [
+        "valid",
+        "invalid",
+        "not available"
+      ]
+    },
+    "interval": 300
+  },
+  {
+    "id": "OAuthGrantTypes",
+    "name": "OAuthGrantTypes",
+    "description": "This metric is used to assess that no deprecated grant types are used in an OAuth 2.0 configuration.",
+    "scale": 1,
+    "allowedValues": {
+      "values": [
+        "authorization_code",
+        "implicit",
+        "password",
+        "client_credentials",
+        "device_code",
+        "refresh_token"
+      ]
+    },
+    "interval": 300
+  },
+  {
+    "id": "APIOAuthProtected",
+    "name": "APIOAuthProtected",
+    "description": "This metric assesses whether an API is protected by OAuth 2.0",
+    "scale": 1,
+    "allowedValues": {
+      "values": [
+        "protected",
+        "unprotected",
+        "no_access"
+      ]
+    },
+    "interval": 300
+  },
+  {
+    "id": "TlsVersion",
+    "name:": "TlsVersion",
+    "description": "This metric is used to assess if up-to-date encryption protocols are used for traffic served from public networks.",
+    "scale": 2,
+    "allowedValues": {
+      "values": [
+        1.0,
+        1.1,
+        1.2,
+        1.3
+      ]
+    },
+    "interval": 300
+  },
+  {
+    "id": "TlsCipherSuite",
+    "name": "TlsCipherSuite",
+    "description": "This metric is used to assess if strong encryption mechanisms are used for traffic served from public networks.",
+    "scale": 1,
+    "range": {
+      "allowedValues": {
+        "values": [
+          "*"
+        ]
+      }
+    },
+    "interval": 300
+  },
+  {
+    "id": "TlsCommonWeaknesses",
+    "name": "TlsCommonWeaknesses",
+    "description": "This metric is used to assess that there are no common vulnerabilities",
+    "scale": 1,
+    "range": {
+      "allowedValues": {
+        "values": [
+          "heartbleed"
+        ]
+      }
+    },
+    "interval": 300
+  },
+  {
+    "id": "AtRestEncryption",
+    "name": "AtRestEncryption",
+    "description": "This metric is used to assess that object storages, i.e., blob storages, are encrypted at rest.",
+    "scale": 1,
+    "range": {
+      "allowedValues": {
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    },
+    "interval": 300
+  }
+]

@@ -1,0 +1,23 @@
+name: Docker and Helm
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+  
+jobs:
+  dockerbuild:
+    strategy:
+      matrix:
+        service: [  cam-api-gateway,
+                    cam-collection-authsec,
+                    cam-collection-commsec,
+                    cam-collection-integrity,
+                    cam-collection-workload,
+                    cam-eval-manager,
+                    cam-req-manager]
+    uses: eclipse-xfsc/dev-ops/.github/workflows/dockerbuild.yml@main
+    with: 
+      build_args: --file "cmd/${SERVICE}/Dockerfile" --build-arg SERVICE=${{ matrix.service }}
+  helm:
+    uses: eclipse-xfsc/dev-ops/.github/workflows/helm.yml@main

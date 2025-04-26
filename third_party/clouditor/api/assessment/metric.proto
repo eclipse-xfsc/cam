@@ -1,0 +1,120 @@
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+//           $$\                           $$\ $$\   $$\
+//           $$ |                          $$ |\__|  $$ |
+//  $$$$$$$\ $$ | $$$$$$\  $$\   $$\  $$$$$$$ |$$\ $$$$$$\    $$$$$$\   $$$$$$\
+// $$  _____|$$ |$$  __$$\ $$ |  $$ |$$  __$$ |$$ |\_$$  _|  $$  __$$\ $$  __$$\
+// $$ /      $$ |$$ /  $$ |$$ |  $$ |$$ /  $$ |$$ |  $$ |    $$ /  $$ |$$ | \__|
+// $$ |      $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$\ $$ |  $$ |$$ |
+// \$$$$$$\  $$ |\$$$$$   |\$$$$$   |\$$$$$$  |$$ |  \$$$   |\$$$$$   |$$ |
+//  \_______|\__| \______/  \______/  \_______|\__|   \____/  \______/ \__|
+//
+// This file is part of Clouditor Community Edition.
+//
+// Contributors:
+//	Fraunhofer AISEC
+
+syntax = "proto3";
+
+package clouditor;
+
+import "google/protobuf/struct.proto";
+
+option go_package = "clouditor.io/clouditor/api/assessment;assessment";
+
+// A metric resource
+message Metric {
+  // Required. The unique identifier of the metric.
+  string id = 1;
+
+  // Required. The human readable name of the metric.
+  string name = 2;
+
+  // The description of the metric
+  string description = 3;
+
+  // The reference to control catalog category or domain
+  string category = 4;
+
+  // The scale of this metric, e.g. categories, ranked data or metric values.
+  Scale scale = 5;
+
+  // The range of this metric. Depending on the scale.
+  Range range = 6;
+
+  // The values a Scale accepts
+  enum Scale {
+    NOMINAL = 0;
+    ORDINAL = 1;
+    METRIC = 2;
+  }
+}
+
+// A range resource representing the range of values
+message Range {
+  // Required.
+  oneof range {
+    // used for nominal scale
+    AllowedValues allowed_values = 1;
+
+    // used for ordinal scale
+    Order order = 2;
+
+    // used for metric scale
+    MinMax min_max = 3;
+  }
+}
+
+// Defines a range of values through a (inclusive) minimum and a maximum
+message MinMax {
+  // Required.
+  int64 min = 1;
+  // Required.
+  int64 max = 2;
+}
+
+// Defines a range
+message AllowedValues { repeated google.protobuf.Value values = 1; }
+
+// Defines a range of values in a pre-defined order from the lowest to the
+// highest.
+message Order { repeated google.protobuf.Value values = 1; }
+
+// Defines the operator and a target value for an individual metric
+message MetricConfiguration {
+  // The operator to compare the metric, such as == or >
+  string operator = 1;
+
+  // The target value
+  google.protobuf.Value target_value = 2;
+
+  // Whether this configuration is a default configuration
+  bool is_default = 3;
+}
+
+// MetricImplementation defines the implementation of an individual metric.
+message MetricImplementation {
+  // The metric which is implemented
+  string metric_id = 1;
+
+  enum Language {
+    LANGUAGE_UNSPECIFIED = 0;
+    REGO = 1;
+  };
+
+  // The language this metric is implemented in
+  Language lang = 2;
+
+  // The actual implementation
+  string code = 3;
+}

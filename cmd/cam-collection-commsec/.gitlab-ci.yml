@@ -1,0 +1,10 @@
+cam-collection-commsec-test:
+  variables:
+    IMAGE: cam-collection-commsec
+  script:
+    - pip list
+    - python service/collection/tls/test_main.py
+    - python service/collection/tls/test_main_reflection.py
+  allow_failure: true
+  retry: 1
+  extends: .test

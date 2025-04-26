@@ -1,0 +1,110 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "Launch all services",
+            "configurations": [
+                "Launch cam-req-manager",
+                "Launch cam-eval-manager",
+                "Launch cam-api-gateway",
+                "Launch cam-collection-authsec",
+                "Launch cam-collection-integrity",
+                "Launch cam-collection-workload"
+            ]
+        },
+        {
+            "name": "Launch all services (local db)",
+            "configurations": [
+                "Launch cam-req-manager (local db)",
+                "Launch cam-eval-manager (local db)",
+                "Launch cam-api-gateway",
+                "Launch cam-collection-authsec",
+                "Launch cam-collection-integrity",
+                "Launch cam-collection-workload"
+            ]
+        }
+    ],
+    "configurations": [
+        {
+            "name": "Launch cam-req-manager",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cam-req-manager/cam-req-manager.go",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--db-in-memory",
+                "--collection-autocreate"
+            ]
+        },
+        {
+            "name": "Launch cam-req-manager (local db)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cam-req-manager/cam-req-manager.go",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--db-sslmode=",
+                "--collection-autocreate"
+            ]
+        },
+        {
+            "name": "Launch cam-eval-manager",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cam-eval-manager/cam-eval-manager.go",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--db-in-memory"
+            ]
+        },
+        {
+            "name": "Launch cam-eval-manager (local db)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cam-eval-manager/cam-eval-manager.go",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--db-sslmode="
+            ]
+        },
+        {
+            "name": "Launch cam-collection-workload",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cam-collection-workload/cam-collection-workload.go",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch cam-collection-integrity",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cam-collection-integrity/cam-collection-integrity.go",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch cam-collection-authsec",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cam-collection-authsec/cam-collection-authsec.go",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch cam-api-gateway",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cam-api-gateway/cam-api-gateway.go",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

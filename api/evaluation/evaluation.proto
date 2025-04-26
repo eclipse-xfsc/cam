@@ -1,0 +1,145 @@
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Contributors:
+//	Fraunhofer AISEC
+
+syntax = "proto3";
+
+package cam;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "api/common/evidence.proto";
+import "tagger/tagger.proto";
+
+option go_package = "gitlab.eclipse.org/eclipse/xfsc/cam/api/evaluation";
+
+// This service represents the GX CAM Evaluation Interface
+service Evaluation {
+  rpc SendEvidences(stream Evidence) returns (google.protobuf.Empty) {}
+  rpc GetEvidence(GetEvidenceRequest) returns (Evidence) {
+    option (google.api.http) = {
+      get : "/v1/evaluation/evidences/{evidence_id}"
+    };
+  }
+  rpc ListEvidences(ListEvidencesRequest) returns (ListEvidencesResponse) {
+    option (google.api.http) = {
+      get : "/v1/evaluation/cloud_services/{service_id}/evidences"
+    };
+  }
+
+  rpc GetEvaluation(GetEvaluationRequest) returns (EvaluationResult) {
+    option (google.api.http) = {
+      get : "/v1/evaluation/cloud_services/{service_id}/metrics/"
+            "{metric_id}"
+    };
+  }
+  rpc StreamEvaluations(StreamEvaluationsRequest)
+      returns (stream EvaluationResult) {}
+
+  rpc CalculateCompliance(CalculateComplianceRequest)
+      returns (google.protobuf.Empty) {}
+
+  rpc GetCompliance(GetComplianceRequest) returns (Compliance) {
+    option (google.api.http) = {
+      get : "/v1/evaluation/cloud_services/{service_id}/controls/"
+            "{control_id}"
+    };
+  }
+  rpc ListCompliance(ListComplianceRequest) returns (ListComplianceResponse) {
+    option (google.api.http) = {
+      get : "/v1/evaluation/cloud_services/{service_id}/compliance"
+    };
+  }
+}
+
+message GetEvidenceRequest { string evidence_id = 1; }
+message ListEvidencesRequest {
+  string service_id = 1;
+  // Optional. Determines the period of time of compliances
+  int64 days = 2;
+
+  string page_token = 3;
+  int32 page_size = 4;
+  string order_by = 5;
+  bool asc = 6;
+}
+message ListEvidencesResponse {
+  repeated Evidence evidences = 1;
+  string next_page_token = 2;
+}
+
+message GetEvaluationRequest {
+  string service_id = 1;
+  string metric_id = 2;
+}
+
+message StreamEvaluationsRequest { string service_id = 1; }
+
+message CalculateComplianceRequest {
+  string service_id = 1;
+  repeated string control_ids = 2;
+}
+
+message GetComplianceRequest {
+  string service_id = 1;
+  string control_id = 2;
+}
+
+message ListComplianceRequest {
+  string service_id = 1;
+  // Optional. Determines the period of time of compliances
+  int64 days = 2;
+
+  string page_token = 3;
+  int32 page_size = 4;
+  string order_by = 5;
+  bool asc = 6;
+}
+message ListComplianceResponse {
+  repeated Compliance compliance_results = 1;
+  string next_page_token = 2;
+}
+
+message EvaluationResult {
+  string id = 1;
+  // Reference to the service that was the target of evaluation
+  string service_id = 2;
+  // Reference to the metric that was used for evaluation
+  string metric_id = 3;
+  // Reference to the evidence that was evaluated
+  string evidence_id = 4;
+  // True, if evaluation was successful. Otherwise false
+  bool status = 5;
+  // Time of evaluation
+  google.protobuf.Timestamp time = 6
+      [ (tagger.tags) = "gorm:\"serializer:timestamppb;type:time\"" ];
+}
+
+message Compliance {
+  string id = 1;
+  // Reference to the service to check for compliance
+  string service_id = 6;
+  // Reference to the control to check for compliance
+  string control_id = 2;
+  // List of references to evaluations of metrics which are associated to this
+  // control
+  repeated EvaluationResult evaluations = 3
+      [ (tagger.tags) = "gorm:\"many2many:compliance_evaluations\"" ];
+  // Compliant case: True or false
+  bool status = 4;
+  // Time of check for compliance
+  google.protobuf.Timestamp time = 5
+      [ (tagger.tags) = "gorm:\"serializer:timestamppb;type:time\"" ];
+}

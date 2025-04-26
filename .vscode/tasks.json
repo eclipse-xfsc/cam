@@ -1,0 +1,130 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "go: install cli",
+            "type": "shell",
+            "command": "go install cmd/cam/cam.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "go: generate",
+            "type": "shell",
+            "command": "go generate",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "go: build cam-req-manager",
+            "type": "shell",
+            "command": "go build cmd/cam-req-manager/cam-req-manager.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "go: generate"
+            ]
+        },
+        {
+            "label": "go: build cam-api-gateway",
+            "type": "shell",
+            "command": "go build cmd/cam-api-gateway/cam-api-gateway.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "go: generate"
+            ]
+        },
+        {
+            "label": "go: build cam-eval-manager",
+            "type": "shell",
+            "command": "go build cmd/cam-eval-manager/cam-eval-manager.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "go: generate"
+            ]
+        },
+        {
+            "label": "go: build cam-collection-authsec",
+            "type": "shell",
+            "command": "go build cmd/cam-collection-authsec/cam-collection-authsec.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "go: generate"
+            ]
+        },
+        {
+            "label": "go: build cam-collection-integrity",
+            "type": "shell",
+            "command": "go build cmd/cam-collection-integrity/cam-collection-integrity.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "go: generate"
+            ]
+        },
+        {
+            "label": "go: build cam-collection-workload",
+            "type": "shell",
+            "command": "go build cmd/cam-collection-workload/cam-collection-workload.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "go: generate"
+            ]
+        },
+        {
+            "label": "python: build cam-collection-commsec",
+            "type": "shell",
+            "command": "python -mpy_compile cmd/cam-collection-commsec/main.py",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "go: generate"
+            ]
+        },
+        {
+            "label": "make: all",
+            "type": "shell",
+            "command": "make all",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "go: generate"
+            ],
+        }
+    ]
+}

@@ -1,0 +1,238 @@
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Contributors:
+//	Fraunhofer AISEC
+
+syntax = "proto3";
+
+package cam;
+
+import "api/assessment/metric.proto";
+import "api/collection/collection.proto";
+import "api/orchestrator/orchestrator.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "tagger/tagger.proto";
+
+option go_package = "gitlab.eclipse.org/eclipse/xfsc/cam/api/configuration";
+
+// This service represents the GX CAM Configuration Interface
+service Configuration {
+  rpc StartMonitoring(StartMonitoringRequest)
+      returns (StartMonitoringResponse) {
+    option (google.api.http) = {
+      post : "/v1/configuration/monitoring/{service_id}/start"
+      body : "*"
+    };
+  }
+
+  rpc StopMonitoring(StopMonitoringRequest) returns (StopMonitoringResponse) {
+    option (google.api.http) = {
+      post : "/v1/configuration/monitoring/{service_id}/stop"
+    };
+  }
+
+  // Retrieves the current monitoring status of the given service. The status
+  // includes the controls which are currently being monitored and the times of
+  // the last and next scheduled monitoring run. Returns 404 error when
+  // monitoring for this service wasn't started yet. Returns empty list when
+  // monitoring was started but is currently stopped/paused.
+  rpc GetMonitoringStatus(GetMonitoringStatusRequest)
+      returns (MonitoringStatus) {
+    option (google.api.http) = {
+      get : "/v1/configuration/monitoring/{service_id}"
+    };
+  }
+
+  // Lists metrics. This function is a wrapper around the
+  // Clouditor Orchestrator's identical function, but we explicitly specify it
+  // here so that we can expose it via the configuration interfaces's REST API.
+  rpc ListMetrics(clouditor.ListMetricsRequest)
+      returns (clouditor.ListMetricsResponse) {
+    option (google.api.http) = {
+      get : "/v1/configuration/metrics"
+    };
+  }
+
+  // Retrieves a particular metric. This function is a wrapper around the
+  // Clouditor Orchestrator's identical function, but we explicitly specify it
+  // here so that we can expose it via the configuration interfaces's REST API.
+  rpc GetMetric(clouditor.GetMetricRequest) returns (clouditor.Metric) {
+    option (google.api.http) = {
+      get : "/v1/configuration/metrics/{metric_id}"
+    };
+  }
+
+  // Retrieves a metric configuration (target value and operator) for a specific
+  // service and metric ID. This function is a wrapper around the Clouditor
+  // Orchestrator's identical function, but we explicitly specify it here so
+  // that we can expose it via the configuration interfaces's REST API.
+  rpc GetMetricConfiguration(clouditor.GetMetricConfigurationRequest)
+      returns (clouditor.MetricConfiguration) {
+    option (google.api.http) = {
+      get : "/v1/configuration/cloud_services/{service_id}/"
+            "metric_configurations/"
+            "{metric_id}"
+    };
+  }
+
+  // Updates a metric configuration (target value and operator) for a specific
+  // service and metric ID. This function is a wrapper around the Clouditor
+  // Orchestrator's identical function, but we explicitly specify it here so
+  // that we can expose it via the configuration interfaces's REST API.
+  rpc UpdateMetricConfiguration(clouditor.UpdateMetricConfigurationRequest)
+      returns (clouditor.MetricConfiguration) {
+    option (google.api.http) = {
+      put : "/v1/configuration/cloud_services/{service_id}/"
+            "metric_configurations/"
+            "{metric_id}"
+      body : "configuration"
+    };
+  }
+
+  // Registers a new target cloud service. This function is a wrapper around the
+  // Clouditor Orchestrator's identical function, but we explicitly specify it
+  // here so that we can expose it via the configuration interfaces's REST API.
+  rpc RegisterCloudService(clouditor.RegisterCloudServiceRequest)
+      returns (clouditor.CloudService) {
+    option (google.api.http) = {
+      post : "/v1/configuration/cloud_services"
+      body : "service"
+    };
+  }
+
+  // Registers a new target cloud service. This function is a wrapper around the
+  // Clouditor Orchestrator's identical function, but we explicitly specify it
+  // here so that we can expose it via the configuration interfaces's REST API.
+  rpc UpdateCloudService(clouditor.UpdateCloudServiceRequest)
+      returns (clouditor.CloudService) {
+    option (google.api.http) = {
+      put : "/v1/configuration/cloud_services/{service_id}"
+      body : "service"
+    };
+  }
+
+  rpc ConfigureCloudService(ConfigureCloudServiceRequest)
+      returns (ConfigureCloudServiceResponse) {
+    option (google.api.http) = {
+      put : "/v1/configuration/cloud_services/{service_id}/configurations"
+      body : "configurations"
+    };
+  }
+
+  rpc ListCloudServiceConfigurations(ListCloudServiceConfigurationsRequest)
+      returns (ListCloudServiceConfigurationsResponse) {
+    option (google.api.http) = {
+      get : "/v1/configuration/cloud_services/{service_id}/configurations"
+    };
+  }
+
+  // Retrieves a target cloud service. This function is a wrapper around the
+  // Clouditor Orchestrator's identical function, but we explicitly specify it
+  // here so that we can expose it via the configuration interfaces's REST API.
+  rpc GetCloudService(clouditor.GetCloudServiceRequest)
+      returns (clouditor.CloudService) {
+    option (google.api.http) = {
+      get : "/v1/configuration/cloud_services/{service_id}"
+    };
+  }
+
+  // Lists all target cloud services. This function is a wrapper around the
+  // Clouditor Orchestrator's identical function, but we explicitly specify it
+  // here so that we can expose it via the configuration interfaces's REST API.
+  rpc ListCloudServices(clouditor.ListCloudServicesRequest)
+      returns (clouditor.ListCloudServicesResponse) {
+    option (google.api.http) = {
+      get : "/v1/configuration/cloud_services"
+    };
+  }
+
+  // Removes a target cloud service. This function is a wrapper around the
+  // Clouditor Orchestrator's identical function, but we explicitly specify it
+  // here so that we can expose it via the configuration interfaces's REST API.
+  rpc RemoveCloudService(clouditor.RemoveCloudServiceRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/v1/configuration/cloud_services/{service_id}"
+    };
+  }
+
+  rpc ListControls(clouditor.ListRequirementsRequest)
+      returns (clouditor.ListRequirementsResponse) {
+    option (google.api.http) = {
+      get : "/v1/configuration/controls"
+    };
+  }
+
+  rpc ListCollectionModules(ListCollectionModulesRequest)
+      returns (ListCollectionModulesResponse);
+  rpc AddCollectionModule(AddCollectionModuleRequest)
+      returns (CollectionModule);
+  rpc RemoveCollectionModule(RemoveCollectionModuleRequest)
+      returns (google.protobuf.Empty);
+}
+
+message StartMonitoringRequest {
+  string service_id = 1;
+  repeated string control_ids = 2;
+}
+message StartMonitoringResponse { MonitoringStatus status = 1; }
+
+message StopMonitoringRequest { string service_id = 1; }
+message StopMonitoringResponse {}
+
+message GetMonitoringStatusRequest { string service_id = 1; }
+
+message GetMetricRequest { int32 metric_id = 1; }
+
+message GetControlRequest {
+  string service_id = 1;
+  string control_id = 2;
+}
+
+message ListCollectionModulesRequest {}
+message ListCollectionModulesResponse { repeated CollectionModule modules = 1; }
+
+message AddCollectionModuleRequest { CollectionModule module = 1; }
+
+message FindCollectionModuleRequest { string metric_id = 1; }
+
+message RemoveCollectionModuleRequest { string module_id = 1; }
+
+message ConfigureCloudServiceRequest {
+  string service_id = 1;
+  Configurations configurations = 2;
+}
+message ConfigureCloudServiceResponse {}
+
+message ListCloudServiceConfigurationsRequest { string service_id = 1; }
+message ListCloudServiceConfigurationsResponse {
+  repeated ServiceConfiguration configurations = 1;
+}
+
+message Configurations { repeated ServiceConfiguration configurations = 1; }
+
+message MonitoringStatus {
+  // Reference to the service whose status is requested
+  string service_id = 1;
+  // Reference to the controls that are currently being monitored
+  repeated string control_ids = 2;
+  // Time when the service was last monitored. Empty when it hasn't started yet
+  google.protobuf.Timestamp last_run = 3
+      [ (tagger.tags) = "gorm:\"serializer:timestamppb;type:time\"" ];
+  // Time when the service will be monitored next time. Empty when monitoring is
+  // not running.
+  google.protobuf.Timestamp next_run = 4
+      [ (tagger.tags) = "gorm:\"serializer:timestamppb;type:time\"" ];
+}

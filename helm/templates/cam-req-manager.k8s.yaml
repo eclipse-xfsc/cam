@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cam-req-manager
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: cam-req-manager
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: cam-req-manager
+        tier: backend
+        CI_COMMIT_REF_SLUG: {{ .Values.CI_COMMIT_REF_SLUG }}
+        CI_COMMIT_SHA: {{ .Values.CI_COMMIT_SHA }}
+
+    spec:
+      containers:
+        - name: cam-req-manager
+          image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-req-manager:{{ .Values.tag }}
+          imagePullPolicy: Always
+          envFrom: [configMapRef: { name: cam-config }]
+          env:
+            - name: CAM_DB_HOST
+              value: fraunhofer-database1-postgres.gxfs-fraunhofer.svc.cluster.local
+            - name: CAM_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres.fraunhofer-database1-postgres.credentials.postgresql.acid.zalan.do
+                  key: username
+                  optional: false
+            - name: CAM_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres.fraunhofer-database1-postgres.credentials.postgresql.acid.zalan.do
+                  key: password
+                  optional: false
+            - name: CAM_API_JWKS_URL
+              value: {{ .Values.common.api.jwksURL }}
+            - name: CAM_OAUTH2_TOKEN_ENDPOINT
+              value: {{ .Values.common.oauth2.tokenEndpoint }}
+            - name: CAM_OAUTH2_SCOPES
+              value: {{ index .Values.common.oauth2.scopes 0 }}
+            - name: CAM_OAUTH2_CLIENT_ID
+              value: {{ .Values.services.reqManager.oauth2.clientID }}
+            - name: CAM_OAUTH2_CLIENT_SECRET
+              value: {{ .Values.services.reqManager.oauth2.clientSecret }}
+          ports:
+            - containerPort: 50100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cam-req-manager
+  labels:
+    app: cam-req-manager
+    tier: backend
+spec:
+  #type: LoadBalancer
+  ports:
+    - port: 50100
+  selector:
+    app: cam-req-manager
+    tier: backend

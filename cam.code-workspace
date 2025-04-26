@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "dashboard"
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"clouditor",
+			"emptypb",
+			"protobuf",
+			"testutil",
+			"timestamppb"
+		],
+		"json.schemas": [
+			{
+				"fileMatch": [
+					"gxfs.json"
+				],
+				"url": "https://raw.githubusercontent.com/usnistgov/OSCAL/main/json/schema/oscal_catalog_schema.json"
+			}
+		]
+	},
+}

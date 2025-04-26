@@ -1,0 +1,68 @@
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Contributors:
+//	Fraunhofer AISEC
+
+syntax = "proto3";
+
+package cam;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "tagger/tagger.proto";
+
+option go_package = "gitlab.eclipse.org/eclipse/xfsc/cam/api/common";
+
+// An evidence resource
+message Evidence {
+  // The ID is a newly generated uuid
+  string id = 1;
+  // Name equals the ID
+  string name = 2;
+  string target_service = 3;
+  // Optional. Specific to the service, e.g. resource ID within service
+  string target_resource = 4;
+
+  // Represents the collection module
+  string tool_id = 11;
+  // Time of evidence creation
+  google.protobuf.Timestamp gathered_at = 6
+      [ (tagger.tags) = "gorm:\"serializer:timestamppb;type:time\"" ];
+  // Conditional, Mutually exclusive with error. The measured value. Depends on
+  // the type of evidence
+  google.protobuf.Value value = 7
+      [ (tagger.tags) = "gorm:\"serializer:json\"" ];
+  // Conditional, Mutually exclusive with value. An error
+  Error error = 8 [ (tagger.tags) = "gorm:\"serializer:json\"" ];
+  // Optional. E.g. a JSON representation of the raw underlying evidence
+  string raw_evidence = 10;
+}
+
+// An error result
+message Error {
+  // The broad type of error, should not be too collection module specific
+  enum Code {
+    ERROR_UNKNOWN = 0;
+    ERROR_INVALID_CONFIGURATION =
+        1; // The collection module configuration did not allow for collection
+    // (e.g. Port number 1000000)
+    ERROR_CONNECTION_FAILURE =
+        2; // The service could not be reached (e.g. Timeout)
+    ERROR_PROTOCOL_VIOLATION = 3; // The service did not behave as expected
+    // (e.g. served SMTP instead of HTTP)
+  }
+  // The type of error
+  Code code = 1;
+  // Optional. A human-readable description of the error.
+  string description = 2;
+}

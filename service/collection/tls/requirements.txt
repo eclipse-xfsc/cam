@@ -1,0 +1,8 @@
+grpcio
+grpcio-tools
+grpcio-reflection
+pyyaml
+pytest
+coverage
+oauthlib
+requests_oauthlib

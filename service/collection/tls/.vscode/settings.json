@@ -1,0 +1,14 @@
+{
+    "python.testing.pytestArgs": [
+        "--doctest-modules",
+        "--doctest-report", "ndiff",
+	"--ignore=api", "--ignore=google"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.extraPaths": [
+        "../../../api/collection",
+        "../../../api/common"
+    ],
+    "testing.autoRun.delay": 3000
+}

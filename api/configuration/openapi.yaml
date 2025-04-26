@@ -1,0 +1,676 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Configuration API
+    description: This service represents the GX CAM Configuration Interface
+    version: 0.0.1
+paths:
+    /v1/configuration/cloud_services:
+        get:
+            tags:
+                - Configuration
+            description: |-
+                Lists all target cloud services. This function is a wrapper around the
+                 Clouditor Orchestrator's identical function, but we explicitly specify it
+                 here so that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_ListCloudServices
+            parameters:
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListCloudServicesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - Configuration
+            description: |-
+                Registers a new target cloud service. This function is a wrapper around the
+                 Clouditor Orchestrator's identical function, but we explicitly specify it
+                 here so that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_RegisterCloudService
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CloudService'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CloudService'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/cloud_services/{serviceId}:
+        get:
+            tags:
+                - Configuration
+            description: |-
+                Retrieves a target cloud service. This function is a wrapper around the
+                 Clouditor Orchestrator's identical function, but we explicitly specify it
+                 here so that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_GetCloudService
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CloudService'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        put:
+            tags:
+                - Configuration
+            description: |-
+                Registers a new target cloud service. This function is a wrapper around the
+                 Clouditor Orchestrator's identical function, but we explicitly specify it
+                 here so that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_UpdateCloudService
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CloudService'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CloudService'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - Configuration
+            description: |-
+                Removes a target cloud service. This function is a wrapper around the
+                 Clouditor Orchestrator's identical function, but we explicitly specify it
+                 here so that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_RemoveCloudService
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/cloud_services/{serviceId}/configurations:
+        get:
+            tags:
+                - Configuration
+            operationId: Configuration_ListCloudServiceConfigurations
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListCloudServiceConfigurationsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        put:
+            tags:
+                - Configuration
+            operationId: Configuration_ConfigureCloudService
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Configurations'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ConfigureCloudServiceResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/cloud_services/{serviceId}/metric_configurations/{metricId}:
+        get:
+            tags:
+                - Configuration
+            description: |-
+                Retrieves a metric configuration (target value and operator) for a specific
+                 service and metric ID. This function is a wrapper around the Clouditor
+                 Orchestrator's identical function, but we explicitly specify it here so
+                 that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_GetMetricConfiguration
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: metricId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MetricConfiguration'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        put:
+            tags:
+                - Configuration
+            description: |-
+                Updates a metric configuration (target value and operator) for a specific
+                 service and metric ID. This function is a wrapper around the Clouditor
+                 Orchestrator's identical function, but we explicitly specify it here so
+                 that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_UpdateMetricConfiguration
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: metricId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/MetricConfiguration'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MetricConfiguration'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/controls:
+        get:
+            tags:
+                - Configuration
+            operationId: Configuration_ListControls
+            parameters:
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListRequirementsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/metrics:
+        get:
+            tags:
+                - Configuration
+            description: |-
+                Lists metrics. This function is a wrapper around the
+                 Clouditor Orchestrator's identical function, but we explicitly specify it
+                 here so that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_ListMetrics
+            parameters:
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListMetricsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/metrics/{metricId}:
+        get:
+            tags:
+                - Configuration
+            description: |-
+                Retrieves a particular metric. This function is a wrapper around the
+                 Clouditor Orchestrator's identical function, but we explicitly specify it
+                 here so that we can expose it via the configuration interfaces's REST API.
+            operationId: Configuration_GetMetric
+            parameters:
+                - name: metricId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Metric'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/monitoring/{serviceId}:
+        get:
+            tags:
+                - Configuration
+            description: |-
+                Retrieves the current monitoring status of the given service. The status
+                 includes the controls which are currently being monitored and the times of
+                 the last and next scheduled monitoring run. Returns 404 error when
+                 monitoring for this service wasn't started yet. Returns empty list when
+                 monitoring was started but is currently stopped/paused.
+            operationId: Configuration_GetMonitoringStatus
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MonitoringStatus'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/monitoring/{serviceId}/start:
+        post:
+            tags:
+                - Configuration
+            operationId: Configuration_StartMonitoring
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StartMonitoringRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StartMonitoringResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/configuration/monitoring/{serviceId}/stop:
+        post:
+            tags:
+                - Configuration
+            operationId: Configuration_StopMonitoring
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StopMonitoringResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        AllowedValues:
+            type: object
+            properties:
+                values:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufValue'
+            description: Defines a range
+        CloudService:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+                requirements:
+                    $ref: '#/components/schemas/CloudService_Requirements'
+        CloudService_Requirements:
+            type: object
+            properties:
+                requirementIds:
+                    type: array
+                    items:
+                        type: string
+        Configurations:
+            type: object
+            properties:
+                configurations:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ServiceConfiguration'
+        ConfigureCloudServiceResponse:
+            type: object
+            properties: {}
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        GoogleProtobufValue:
+            description: Represents a dynamically typed value which can be either null, a number, a string, a boolean, a recursive struct value, or a list of values.
+        ListCloudServiceConfigurationsResponse:
+            type: object
+            properties:
+                configurations:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ServiceConfiguration'
+        ListCloudServicesResponse:
+            type: object
+            properties:
+                services:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CloudService'
+                nextPageToken:
+                    type: string
+        ListMetricsResponse:
+            type: object
+            properties:
+                metrics:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Metric'
+                nextPageToken:
+                    type: string
+        ListRequirementsResponse:
+            type: object
+            properties:
+                requirements:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Requirement'
+                nextPageToken:
+                    type: string
+        Metric:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: Required. The unique identifier of the metric.
+                name:
+                    type: string
+                    description: Required. The human readable name of the metric.
+                description:
+                    type: string
+                    description: The description of the metric
+                category:
+                    type: string
+                    description: The reference to control catalog category or domain
+                scale:
+                    type: integer
+                    description: The scale of this metric, e.g. categories, ranked data or metric values.
+                    format: enum
+                range:
+                    $ref: '#/components/schemas/Range'
+            description: A metric resource
+        MetricConfiguration:
+            type: object
+            properties:
+                operator:
+                    type: string
+                    description: The operator to compare the metric, such as == or >
+                targetValue:
+                    $ref: '#/components/schemas/GoogleProtobufValue'
+                isDefault:
+                    type: boolean
+                    description: Whether this configuration is a default configuration
+            description: Defines the operator and a target value for an individual metric
+        MinMax:
+            type: object
+            properties:
+                min:
+                    type: integer
+                    description: Required.
+                    format: int64
+                max:
+                    type: integer
+                    description: Required.
+                    format: int64
+            description: Defines a range of values through a (inclusive) minimum and a maximum
+        MonitoringStatus:
+            type: object
+            properties:
+                serviceId:
+                    type: string
+                    description: Reference to the service whose status is requested
+                controlIds:
+                    type: array
+                    items:
+                        type: string
+                    description: Reference to the controls that are currently being monitored
+                lastRun:
+                    type: string
+                    description: Time when the service was last monitored. Empty when it hasn't started yet
+                    format: date-time
+                nextRun:
+                    type: string
+                    description: Time when the service will be monitored next time. Empty when monitoring is not running.
+                    format: date-time
+        Order:
+            type: object
+            properties:
+                values:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufValue'
+            description: Defines a range of values in a pre-defined order from the lowest to the highest.
+        Range:
+            type: object
+            properties:
+                allowedValues:
+                    $ref: '#/components/schemas/AllowedValues'
+                order:
+                    $ref: '#/components/schemas/Order'
+                minMax:
+                    $ref: '#/components/schemas/MinMax'
+            description: A range resource representing the range of values
+        Requirement:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+                metricIds:
+                    type: array
+                    items:
+                        type: string
+            description: Requirement represents a certain requirement that needs to be fulfilled. It could be a control in a certification catalog.
+        ServiceConfiguration:
+            type: object
+            properties:
+                serviceId:
+                    type: string
+                    description: The cloud service this configuration is used for. It is used as a composite primary key together with the collection module type.
+                typeUrl:
+                    type: string
+                    description: The type URL of the configuration. This value needs to be the same as the @type property within the raw_configuration. Collection modules that are looking for a service configuration will match their config_message_type_url field against this. It is used as a composite primary key together with the service ID.
+                rawConfiguration:
+                    $ref: '#/components/schemas/GoogleProtobufAny'
+        StartMonitoringRequest:
+            type: object
+            properties:
+                serviceId:
+                    type: string
+                controlIds:
+                    type: array
+                    items:
+                        type: string
+        StartMonitoringResponse:
+            type: object
+            properties:
+                status:
+                    $ref: '#/components/schemas/MonitoringStatus'
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        StopMonitoringResponse:
+            type: object
+            properties: {}
+tags:
+    - name: Configuration

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cam-collection-commsec
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: cam-collection-commsec
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: cam-collection-commsec
+        tier: backend
+        CI_COMMIT_REF_SLUG: {{ .Values.CI_COMMIT_REF_SLUG }}
+        CI_COMMIT_SHA: {{ .Values.CI_COMMIT_SHA }}
+    spec:
+      containers:
+        - name: cam-collection-commsec
+          image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-collection-commsec:{{ .Values.tag }}
+          imagePullPolicy: Always
+          envFrom: [configMapRef: { name: cam-config }]
+          env:
+            - name: CAM_API_JWKS_URL
+              value: {{ .Values.common.api.jwksURL }}
+            - name: CAM_OAUTH2_TOKEN_ENDPOINT
+              value: {{ .Values.common.oauth2.tokenEndpoint }}
+            - name: CAM_OAUTH2_SCOPES
+              value: {{ index .Values.common.oauth2.scopes 0 }}
+            - name: CAM_OAUTH2_CLIENT_ID
+              value: {{ .Values.services.collectionCommSec.oauth2.clientID }}
+            - name: CAM_OAUTH2_CLIENT_SECRET
+              value: {{ .Values.services.collectionCommSec.oauth2.clientSecret }}
+          ports:
+            - containerPort: 50051
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cam-collection-commsec
+  labels:
+    app: cam-collection-commsec
+    tier: backend
+spec:
+  #type: LoadBalancer
+  ports:
+    - port: 50051
+  selector:
+    app: cam-collection-commsec
+    tier: backend

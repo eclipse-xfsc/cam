@@ -1,0 +1,75 @@
+services:
+  api-gateway:
+    image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-api-gateway:main
+    environment:
+      CAM_CONFIGURATION_SERVICE_ADDRESS: "configuration:50100"
+      CAM_EVALUATION_SERVICE_ADDRESS: "evaluation:50101"
+    depends_on:
+      - configuration
+      - evaluation
+    ports:
+      - "8080:8080"
+  configuration:
+    image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-req-manager:main
+    environment:
+      CAM_COLLECTION_AUTOCREATE: true
+      CAM_DB_HOST: postgres
+      CAM_DB_SSLMODE: disable
+      CAM_COLLECTION_COMMSEC_SERVICE_HOST: collection-commsec
+      CAM_COLLECTION_AUTHSEC_SERVICE_HOST: collection-authsec
+      CAM_COLLECTION_INTEGRITY_SERVICE_HOST: collection-integrity
+      CAM_COLLECTION_WORKLOAD_SERVICE_HOST: collection-workload
+    env_file:
+      - compose.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+  evaluation:
+    image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-eval-manager:main
+    environment:
+      CAM_DB_HOST: postgres
+      CAM_DB_SSLMODE: disable
+      CAM_CONFIGURATION_SERVICE_ADDRESS: "configuration:50100"
+    env_file:
+      - compose.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+  collection-commsec:
+    image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-collection-commsec:main
+    ports:
+      - "50051:50051"
+    environment:
+      OAUTHLIB_INSECURE_TRANSPORT: 1
+    env_file:
+      - compose.env
+  collection-authsec:
+    image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-collection-authsec:main
+    ports:
+      - "50052:50052"
+  collection-integrity:
+    image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-collection-integrity:main
+    ports:
+      - "50053:50053"
+    env_file:
+      - compose.env
+  collection-workload:
+    image: registry.gitlab.eclipse.org/eclipse/xfsc/cam/cam-collection-workload:main
+    ports:
+      - "50054:50054"
+    env_file:
+      - compose.env
+  oauth:
+    image: ghcr.io/oxisto/oauth2go
+    ports:
+      - "8000:8000"
+    command: "--client-secret client --user-password admin --redirect-uri http://localhost:8080/#/loggedin"
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10

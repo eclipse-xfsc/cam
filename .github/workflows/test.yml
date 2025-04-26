@@ -1,0 +1,71 @@
+name: Go Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  
+jobs:
+  go-build-and-test:
+    runs-on: ubuntu-latest
+
+    container:
+      image: node-654e3bca7fbeeed18f81d7c7.ps-xaas.io/dev-ops/build-executor
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js dependencies and build dashboard
+        working-directory: dashboard
+        run: |
+          npm install
+          npm run build
+
+      - name: Build Go binaries
+        run: |
+          go build cmd/cam-api-gateway/cam-api-gateway.go
+          go build cmd/cam-collection-authsec/cam-collection-authsec.go
+          go build cmd/cam-collection-integrity/cam-collection-integrity.go
+          go build cmd/cam-collection-workload/cam-collection-workload.go
+          go build cmd/cam-eval-manager/cam-eval-manager.go
+          go build cmd/cam-req-manager/cam-req-manager.go
+
+      - name: Install Go test reporters
+        run: |
+          go install github.com/jstemmer/go-junit-report@latest
+          go install github.com/boumenot/gocover-cobertura@latest
+
+      - name: Run tests and generate reports
+        run: |
+          go test -v -coverprofile=coverage.txt -covermode=atomic ./... 2>&1 | tee gotest.results.txt
+          cat gotest.results.txt | $(go env GOPATH)/bin/go-junit-report -set-exit-code > junit.xml
+          $(go env GOPATH)/bin/gocover-cobertura < coverage.txt > coverage.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            gotest.results.txt
+            junit.xml
+            coverage.xml
+            cam-req-manager
+            cam-eval-manager
+            cam-api-gateway
+            cam-collection-authsec
+            cam-collection-integrity
+            cam-collection-workload
+
+      - name: Publish JUnit Test Report
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: junit.xml
+
+      - name: Publish Coverage Report
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.xml
+          flags: unittests

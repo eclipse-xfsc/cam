@@ -1,0 +1,63 @@
+{
+    "catalog": {
+        "uuid": "025941E6-745C-4D77-A177-DD90D543C241",
+        "metadata": {
+            "title": "GXFS Requirements",
+            "last-modified": "2022-06-02T14:00:00Z",
+            "version": "1.0",
+            "oscal-version": "1.0.4"
+        },
+        "controls": [
+            {
+                "id": "OPS-21",
+                "title": "System Hardening",
+                "props": [
+                    {
+                        "name": "metrics",
+                        "value": "SystemComponentsIntegrity"
+                    }
+                ]
+            },
+            {
+                "id": "IAM-07",
+                "title": "Authentication Mechanisms",
+                "props": [
+                    {
+                        "name": "metrics",
+                        "value": "OAuthGrantTypes,APIOAuthProtected"
+                    }
+                ]
+            },
+            {
+                "id": "CKM-02",
+                "title": "Encryption of Data in Transit",
+                "props": [
+                    {
+                        "name": "metrics",
+                        "value": "TlsVersion,TlsCipherSuite,TlsCommonWeaknesses"
+                    }
+                ]
+            },
+            {
+                "id": "CKM-03",
+                "title": "Encryption of Data at Rest",
+                "props": [
+                    {
+                        "name": "metrics",
+                        "value": "AtRestEncryption"
+                    }
+                ]
+            },
+            {
+                "id": "OIS-01",
+                "title": "Information Security Management System",
+                "props": [
+                    {
+                        "name": "metrics",
+                        "value": "CyberSecurityCertification"
+                    }
+                ]
+            }
+        ]
+    }
+}

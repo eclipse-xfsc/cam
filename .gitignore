@@ -1,0 +1,15 @@
+.DS_Store
+cmd/cam-collection-integrity/cam-collection-integrity
+cmd/cam-evaluation/cam-evaluation
+cmd/cam-req-manager/cam-req-manager
+cam
+.idea
+main
+main.pyc
+coverage.cov
+build
+__debug_bin
+__pycache__
+*_pb2.py
+*_pb2_grpc.py
+.venv

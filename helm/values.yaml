@@ -1,0 +1,41 @@
+tag: main
+replicas: 1
+CI_COMMIT_REF_SLUG: filled_by_ci
+CI_COMMIT_SHA: filled_by_ci
+common:
+  api:
+    jwksURL: https://as.aisec.fraunhofer.de/auth/jwks.json
+  oauth2:
+    tokenEndpoint: https://as.aisec.fraunhofer.de/auth/token
+    scopes: ["gaiax"]
+services:
+  apiGateway:
+    oauth2:
+      authority: https://as.aisec.fraunhofer.de/auth
+      clientID: gaiax-fs
+      redirectURI: https://cam.gxfs.dev/#/loggedin
+      postLogoutRedirectURI: https://cam.gxfs.dev/#/loggedout
+  reqManager:
+    oauth2:
+      clientID: gaiax-fs-req
+      clientSecret: filled_by_ci
+  evalManager:
+    oauth2:
+      clientID: gaiax-fs-eval
+      clientSecret: filled_by_ci
+  collectionAuthSec:
+    oauth2:
+      clientID: gaiax-fs-cm-authsec
+      clientSecret: filled_by_ci
+  collectionCommSec:
+    oauth2:
+      clientID: gaiax-fs-cm-commsec
+      clientSecret: filled_by_ci
+  collectionIntegrity:
+    oauth2:
+      clientID: gaiax-fs-cm-integrity
+      clientSecret: filled_by_ci
+  collectionWorkload:
+    oauth2:
+      clientID: gaiax-fs-cm-workload
+      clientSecret: filled_by_ci

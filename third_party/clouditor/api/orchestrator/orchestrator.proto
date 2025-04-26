@@ -1,0 +1,479 @@
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+//           $$\                           $$\ $$\   $$\
+//           $$ |                          $$ |\__|  $$ |
+//  $$$$$$$\ $$ | $$$$$$\  $$\   $$\  $$$$$$$ |$$\ $$$$$$\    $$$$$$\   $$$$$$\
+// $$  _____|$$ |$$  __$$\ $$ |  $$ |$$  __$$ |$$ |\_$$  _|  $$  __$$\ $$  __$$\
+// $$ /      $$ |$$ /  $$ |$$ |  $$ |$$ /  $$ |$$ |  $$ |    $$ /  $$ |$$ | \__|
+// $$ |      $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$\ $$ |  $$ |$$ |
+// \$$$$$$\  $$ |\$$$$$   |\$$$$$   |\$$$$$$  |$$ |  \$$$   |\$$$$$   |$$ |
+//  \_______|\__| \______/  \______/  \_______|\__|   \____/  \______/ \__|
+//
+// This file is part of Clouditor Community Edition.
+//
+// Contributors:
+//	Fraunhofer AISEC
+
+syntax = "proto3";
+
+package clouditor;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "api/assessment/metric.proto";
+import "api/assessment/assessment.proto";
+
+option go_package = "clouditor.io/clouditor/api/orchestrator";
+
+// Manages the orchestration of components within the Clouditor architecture
+service Orchestrator {
+  // Registers the passed assessment tool
+  rpc RegisterAssessmentTool(RegisterAssessmentToolRequest)
+      returns (AssessmentTool) {
+    option (google.api.http) = {
+      post : "/v1/orchestrator/assessment_tools"
+      body : "tool"
+    };
+  }
+
+  // Lists all assessment tools assessing evidences for the metric given by the
+  // passed metric id
+  rpc ListAssessmentTools(ListAssessmentToolsRequest)
+      returns (ListAssessmentToolsResponse) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/assessment_tools"
+      additional_bindings {
+        get : "/v1/orchestrator/{metric_id}/assessment_tools"
+      }
+    };
+  }
+
+  // Returns assessment tool given by the passed tool id
+  rpc GetAssessmentTool(GetAssessmentToolRequest) returns (AssessmentTool) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/assessment_tools/{tool_id}"
+    };
+  }
+
+  // Updates the assessment tool given by the passed id
+  rpc UpdateAssessmentTool(UpdateAssessmentToolRequest)
+      returns (AssessmentTool) {
+    option (google.api.http) = {
+      put : "/v1/orchestrator/assessment_tools/{tool_id}"
+      body : "tool"
+    };
+  }
+
+  // Remove assessment tool with passed id from the list of active assessment
+  // tools
+  rpc DeregisterAssessmentTool(DeregisterAssessmentToolRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/v1/orchestrator/assessment_tools/{tool_id}"
+    };
+  }
+
+  // Stores the assessment result provided by an assessment tool
+  rpc StoreAssessmentResult(StoreAssessmentResultRequest)
+      returns (StoreAssessmentResultResponse) {
+    option (google.api.http) = {
+      post : "/v1/orchestrator/assessment_results"
+      body : "result"
+    };
+  }
+
+  // Stores stream of assessment results provided by an assessment tool and
+  // returns a response stream. Part of the public API, not exposed as REST.
+  rpc StoreAssessmentResults(stream StoreAssessmentResultRequest)
+      returns (stream StoreAssessmentResultResponse);
+
+  // List all assessment results. Part of the public API, also exposed as REST.
+  rpc ListAssessmentResults(ListAssessmentResultsRequest)
+      returns (ListAssessmentResultsResponse) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/assessment_results"
+    };
+  }
+
+  // Creates a new metric
+  rpc CreateMetric(CreateMetricRequest) returns (Metric) {
+    option (google.api.http) = {
+      post : "/v1/orchestrator/metrics"
+      body : "metric"
+    };
+  }
+
+  // Updates an existing metric
+  rpc UpdateMetric(UpdateMetricRequest) returns (Metric) {
+    option (google.api.http) = {
+      put : "/v1/orchestrator/metrics/{metric_id}"
+      body : "metric"
+    };
+  }
+
+  // Returns the metric with the passed metric id
+  rpc GetMetric(GetMetricRequest) returns (Metric) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/metrics/{metric_id}"
+    };
+  }
+
+  // List all metrics provided by the metric catalog
+  rpc ListMetrics(ListMetricsRequest) returns (ListMetricsResponse) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/metrics"
+    };
+  }
+
+  rpc ListRequirements(ListRequirementsRequest)
+      returns (ListRequirementsResponse) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/requirements"
+    };
+  }
+
+  // Registers a new target cloud service
+  rpc RegisterCloudService(RegisterCloudServiceRequest) returns (CloudService) {
+    option (google.api.http) = {
+      post : "/v1/orchestrator/cloud_services"
+      body : "service"
+    };
+  }
+
+  // Registers a new target cloud service
+  rpc UpdateCloudService(UpdateCloudServiceRequest) returns (CloudService) {
+    option (google.api.http) = {
+      put : "/v1/orchestrator/cloud_services/{service_id}"
+      body : "service"
+    };
+  }
+
+  // Retrieves a target cloud service
+  rpc GetCloudService(GetCloudServiceRequest) returns (CloudService) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/cloud_services/{service_id}"
+    };
+  }
+
+  // Lists all target cloud services
+  rpc ListCloudServices(ListCloudServicesRequest)
+      returns (ListCloudServicesResponse) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/cloud_services"
+    };
+  }
+
+  // Removes a target cloud service
+  rpc RemoveCloudService(RemoveCloudServiceRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/v1/orchestrator/cloud_services/{service_id}"
+    };
+  }
+
+  // Updates a metric configuration (target value and operator) for a specific
+  // service and metric ID
+  rpc UpdateMetricConfiguration(UpdateMetricConfigurationRequest)
+      returns (MetricConfiguration) {
+    option (google.api.http) = {
+      put : "/v1/orchestrator/cloud_services/{service_id}/"
+            "metric_configurations/"
+            "{metric_id}"
+      body : "configuration"
+    };
+  }
+
+  // Retrieves a metric configuration (target value and operator) for a specific
+  // service and metric ID
+  rpc GetMetricConfiguration(GetMetricConfigurationRequest)
+      returns (MetricConfiguration) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/cloud_services/{service_id}/"
+            "metric_configurations/"
+            "{metric_id}"
+    };
+  }
+
+  // Lists all a metric configurations (target value and operator) for a
+  // specific service ID
+  rpc ListMetricConfigurations(ListMetricConfigurationRequest)
+      returns (ListMetricConfigurationResponse) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/cloud_services/{service_id}/metric_configurations"
+    };
+  }
+
+  // Updates an existing metric implementation
+  rpc UpdateMetricImplementation(UpdateMetricImplementationRequest)
+      returns (MetricImplementation) {
+    option (google.api.http) = {
+      put : "/v1/orchestrator/metrics/{metric_id}/implementation"
+      body : "implementation"
+    };
+  }
+
+  // Returns the metric implementation of the passed metric id
+  rpc GetMetricImplementation(GetMetricImplementationRequest)
+      returns (MetricImplementation) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/metrics/{metric_id}/implementation"
+    };
+  }
+
+  rpc SubscribeMetricChangeEvents(SubscribeMetricChangeEventRequest)
+      returns (stream MetricChangeEvent) {}
+
+  // Creates a new certificate
+  rpc CreateCertificate(CreateCertificateRequest) returns (Certificate) {
+    option (google.api.http) = {
+      post : "/v1/orchestrator/certificates"
+      body : "certificate"
+    };
+  }
+
+  // Retrieves a certificate
+  rpc GetCertificate(GetCertificateRequest) returns (Certificate) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/certificates/{certificate_id}"
+    };
+  }
+
+  // Lists all target certificates
+  rpc ListCertificates(ListCertificatesRequest)
+      returns (ListCertificatesResponse) {
+    option (google.api.http) = {
+      get : "/v1/orchestrator/certificates"
+    };
+  }
+
+  // Updates an existing certificate
+  rpc UpdateCertificate(UpdateCertificateRequest) returns (Certificate) {
+    option (google.api.http) = {
+      put : "/v1/orchestrator/certificates/{certificate_id}"
+      body : "certificate"
+    };
+  }
+
+  // Removes a certificate
+  rpc RemoveCertificate(RemoveCertificateRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/v1/orchestrator/certificates/{certificate_id}"
+    };
+  }
+}
+
+message RegisterAssessmentToolRequest { AssessmentTool tool = 1; }
+
+message ListAssessmentToolsRequest {
+  // filter tools by metric id
+  string metric_id = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+message ListAssessmentToolsResponse {
+  repeated AssessmentTool tools = 1;
+  string next_page_token = 2;
+}
+
+message GetAssessmentToolRequest { string tool_id = 1; }
+
+message UpdateAssessmentToolRequest {
+  string tool_id = 1;
+  AssessmentTool tool = 2;
+}
+
+message DeregisterAssessmentToolRequest { string tool_id = 1; }
+
+message StoreAssessmentResultRequest { AssessmentResult result = 1; }
+message StoreAssessmentResultResponse {
+  bool status = 1;
+  string status_message = 2;
+}
+
+message CreateMetricRequest { Metric metric = 1; }
+
+message UpdateMetricRequest {
+  string metric_id = 1;
+  Metric metric = 2;
+}
+
+message GetMetricRequest { string metric_id = 1; }
+
+message ListMetricsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+message ListMetricsResponse {
+  repeated Metric metrics = 1;
+  string next_page_token = 2;
+}
+
+message ListRequirementsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+message ListRequirementsResponse {
+  repeated Requirement requirements = 1;
+  string next_page_token = 2;
+}
+
+message GetCloudServiceRequest { string service_id = 1; }
+
+message RegisterCloudServiceRequest { CloudService service = 1; }
+
+message UpdateCloudServiceRequest {
+  string service_id = 1;
+  CloudService service = 2;
+}
+
+message RemoveCloudServiceRequest { string service_id = 1; }
+
+message ListCloudServicesRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+message ListCloudServicesResponse {
+  repeated CloudService services = 1;
+  string next_page_token = 2;
+}
+
+message UpdateMetricConfigurationRequest {
+  string service_id = 1;
+
+  string metric_id = 2;
+
+  MetricConfiguration configuration = 3;
+}
+
+message GetMetricConfigurationRequest {
+  string service_id = 1;
+
+  string metric_id = 2;
+}
+
+message ListMetricConfigurationRequest { string service_id = 1; }
+
+message ListMetricConfigurationResponse {
+  // A map of metric configurations associated by their metric ID
+  map<string, MetricConfiguration> configurations = 1;
+}
+
+message UpdateMetricImplementationRequest {
+  string metric_id = 1;
+  MetricImplementation implementation = 2;
+}
+
+message GetMetricImplementationRequest {
+  string metric_id = 1;
+  string lang = 2;
+}
+
+message SubscribeMetricChangeEventRequest {}
+
+// MetricChangeEvent represents a change of either a metric configuration or
+// implementation.
+message MetricChangeEvent {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    CONFIG_CHANGED = 1;
+    IMPLEMENTATION_CHANGED = 2;
+    METADATA_CHANGED = 3;
+  }
+
+  Type type = 1;
+  string metric_id = 2;
+}
+
+// Represents an external tool or service that offers assessments according to
+// certain metrics.
+message AssessmentTool {
+  string id = 1;
+
+  string name = 2;
+
+  string description = 3;
+
+  // a list of metrics that this tool can assess, referred by their ids
+  repeated string available_metrics = 4;
+}
+
+message CloudService {
+  string id = 1;
+
+  string name = 2;
+
+  string description = 3;
+
+  message Requirements { repeated string requirement_ids = 1; }
+
+  Requirements requirements = 4;
+}
+
+// Requirement represents a certain requirement that needs to be fulfilled. It
+// could be a control in a certification catalog.
+message Requirement {
+  string id = 1;
+
+  string name = 2;
+
+  string description = 3;
+
+  repeated string metric_ids = 4;
+}
+
+message GetCertificateRequest { string certificate_id = 1; }
+
+message ListCertificatesRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+message ListCertificatesResponse {
+  repeated Certificate certificates = 1;
+  string next_page_token = 2;
+}
+
+message UpdateCertificateRequest {
+  string certificate_id = 1;
+  Certificate certificate = 2;
+}
+
+message CreateCertificateRequest { Certificate certificate = 1; }
+
+message RemoveCertificateRequest { string certificate_id = 1; }
+
+// An ISO17021-based certificate
+message Certificate {
+  string id = 1;
+  string name = 2;
+  string service_id = 3;
+  string issue_date = 4;
+  string expiration_date = 5;
+  string standard = 6;
+  string assurance_level = 7;
+  string cab = 8;
+  string description = 9;
+  // A list of states at specific times
+  repeated State states = 10;
+}
+
+// A state of a certificate at a given time
+message State {
+  string id = 1;
+  // An EUCS-defined state, e.g. `new`, `suspended` or `withdrawn`
+  string state = 2;
+  string tree_id = 3;
+  string timestamp = 4;
+  // Reference to the certificate
+  string certificate_id = 5;
+}

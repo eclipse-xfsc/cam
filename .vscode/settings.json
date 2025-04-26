@@ -1,0 +1,9 @@
+{
+    "protoc": {
+        "options": [
+            "-I.",
+            "-Ithird_party",
+            "-Ithird_party/clouditor"
+        ]
+    }
+}

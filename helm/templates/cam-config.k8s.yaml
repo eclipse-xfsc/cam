@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cam-config
+data:
+  CAM_CONFIGURATION_SERVICE_ADDRESS: "cam-req-manager:50100"
+  CAM_EVALUATION_SERVICE_ADDRESS: "cam-eval-manager:50101"
+  CAM_COLLECTION_AUTOCREATE: "true"

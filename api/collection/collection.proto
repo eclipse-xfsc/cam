@@ -1,0 +1,127 @@
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Contributors:
+//	Fraunhofer AISEC
+
+
+syntax = "proto3";
+
+package cam;
+
+import "api/assessment/metric.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "tagger/tagger.proto";
+
+option go_package = "gitlab.eclipse.org/eclipse/xfsc/cam/api/collection";
+
+service Collection {
+  // Trigger a collection module to do a single collection
+  rpc StartCollecting(StartCollectingRequest) returns (StartCollectingResponse);
+  // StopCollecting is currently not used
+  rpc StopCollecting(StopCollectingRequest) returns (google.protobuf.Empty);
+  // Set up a stream to a collection module for triggering multiple collections
+  rpc StartCollectingStream(stream StartCollectingRequest)
+      returns (google.protobuf.Empty);
+}
+
+message ServiceConfiguration {
+  // The cloud service this configuration is used for. It is used as a composite
+  // primary key together with the collection module type.
+  string service_id = 1 [ (tagger.tags) = "gorm:\"primaryKey\"" ];
+
+  // The type URL of the configuration. This value needs to be the same as the
+  // @type property within the raw_configuration. Collection modules that are
+  // looking for a service configuration will match their
+  // config_message_type_url field against this. It is used as a composite
+  // primary key together with the service ID.
+  string type_url = 7 [ (tagger.tags) = "gorm:\"primaryKey\"" ];
+
+  // The raw configuration value. This is most likely a JSON or YAML
+  // representation of a config file specific to a collection module.
+  google.protobuf.Any raw_configuration = 2
+      [ (tagger.tags) = "gorm:\"serializer:anypb\"" ];
+}
+
+message StartCollectingRequest {
+  // The service we are trying to collect evidence for.
+  string service_id = 1;
+
+  // The evaluation manager which should receive the evidence.
+  string eval_manager = 3;
+
+  // A service configuration, which is specific to the collection module where
+  // this request is sent to.
+  ServiceConfiguration configuration = 10;
+}
+message StartCollectingResponse { string id = 1; }
+
+message StopCollectingRequest { string id = 1; }
+
+// A resource representing a collection module which collects technical
+// evidences
+message CollectionModule {
+  string id = 1;
+
+  string name = 2;
+
+  string description = 3;
+
+  // metrics contains references to metrics that this collection module can
+  // possibly gather evidences for
+  repeated clouditor.Metric metrics = 4
+      [ (tagger.tags) = "gorm:\"many2many:collection_module_metrics;constraint:"
+                        "OnDelete:CASCADE;\"" ];
+
+  // address specifies the host and port of the collection module's gRPC API
+  string address = 5;
+
+  // Specifies the type URL of the protobuf message that is used to configure
+  // this collection module and that needs to be sent with each
+  // StartCollectingRequest's ServiceConfiguration.
+  string config_message_type_url = 6;
+}
+
+message CommunicationSecurityConfig { string endpoint = 1; }
+
+// A resource representing the configuration for the Authentication Security
+// Collection Module
+// TODO(bellebaum): Add remaining comments
+message AuthenticationSecurityConfig {
+  // Required. The URL of the Authorization Server issuing the token.
+  string issuer = 1;
+  // Optional. The URL for Authorization Server Metadata (RFC8414)
+  string metadata_document = 2;
+  // Required? ...
+  string api_endpoint = 3;
+  //
+  string client_id = 4;
+  //
+  string client_secret = 5;
+  //
+  string scopes = 6;
+}
+
+message RemoteIntegrityConfig {
+  string target = 1;
+  string certificate = 2;
+}
+
+message WorkloadSecurityConfig {
+  // TODO(lebogg to garuppel): Is string possible as well?
+  // TODO(lebogg to garuppel): We could use oneof
+  google.protobuf.Value openstack = 1;
+  google.protobuf.Value kubernetes = 2;
+  google.protobuf.Value aws = 3;
+}

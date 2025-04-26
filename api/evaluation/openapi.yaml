@@ -1,0 +1,317 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Evaluation API
+    description: This service represents the GX CAM Evaluation Interface
+    version: 0.0.1
+paths:
+    /v1/evaluation/cloud_services/{serviceId}/compliance:
+        get:
+            tags:
+                - Evaluation
+            operationId: Evaluation_ListCompliance
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: days
+                  in: query
+                  description: Optional. Determines the period of time of compliances
+                  schema:
+                    type: integer
+                    format: int64
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  schema:
+                    type: string
+                - name: asc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListComplianceResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/evaluation/cloud_services/{serviceId}/controls/{controlId}:
+        get:
+            tags:
+                - Evaluation
+            operationId: Evaluation_GetCompliance
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: controlId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Compliance'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/evaluation/cloud_services/{serviceId}/evidences:
+        get:
+            tags:
+                - Evaluation
+            operationId: Evaluation_ListEvidences
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: days
+                  in: query
+                  description: Optional. Determines the period of time of compliances
+                  schema:
+                    type: integer
+                    format: int64
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  schema:
+                    type: string
+                - name: asc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListEvidencesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/evaluation/cloud_services/{serviceId}/metrics/{metricId}:
+        get:
+            tags:
+                - Evaluation
+            operationId: Evaluation_GetEvaluation
+            parameters:
+                - name: serviceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: metricId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/EvaluationResult'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/evaluation/evidences/{evidenceId}:
+        get:
+            tags:
+                - Evaluation
+            operationId: Evaluation_GetEvidence
+            parameters:
+                - name: evidenceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Evidence'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        Compliance:
+            type: object
+            properties:
+                id:
+                    type: string
+                serviceId:
+                    type: string
+                    description: Reference to the service to check for compliance
+                controlId:
+                    type: string
+                    description: Reference to the control to check for compliance
+                evaluations:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/EvaluationResult'
+                    description: List of references to evaluations of metrics which are associated to this control
+                status:
+                    type: boolean
+                    description: 'Compliant case: True or false'
+                time:
+                    type: string
+                    description: Time of check for compliance
+                    format: date-time
+        Error:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The type of error
+                    format: enum
+                description:
+                    type: string
+                    description: Optional. A human-readable description of the error.
+            description: An error result
+        EvaluationResult:
+            type: object
+            properties:
+                id:
+                    type: string
+                serviceId:
+                    type: string
+                    description: Reference to the service that was the target of evaluation
+                metricId:
+                    type: string
+                    description: Reference to the metric that was used for evaluation
+                evidenceId:
+                    type: string
+                    description: Reference to the evidence that was evaluated
+                status:
+                    type: boolean
+                    description: True, if evaluation was successful. Otherwise false
+                time:
+                    type: string
+                    description: Time of evaluation
+                    format: date-time
+        Evidence:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: The ID is a newly generated uuid
+                name:
+                    type: string
+                    description: Name equals the ID
+                targetService:
+                    type: string
+                targetResource:
+                    type: string
+                    description: Optional. Specific to the service, e.g. resource ID within service
+                toolId:
+                    type: string
+                    description: Represents the collection module
+                gatheredAt:
+                    type: string
+                    description: Time of evidence creation
+                    format: date-time
+                value:
+                    $ref: '#/components/schemas/GoogleProtobufValue'
+                error:
+                    $ref: '#/components/schemas/Error'
+                rawEvidence:
+                    type: string
+                    description: Optional. E.g. a JSON representation of the raw underlying evidence
+            description: An evidence resource
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        GoogleProtobufValue:
+            description: Represents a dynamically typed value which can be either null, a number, a string, a boolean, a recursive struct value, or a list of values.
+        ListComplianceResponse:
+            type: object
+            properties:
+                complianceResults:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Compliance'
+                nextPageToken:
+                    type: string
+        ListEvidencesResponse:
+            type: object
+            properties:
+                evidences:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Evidence'
+                nextPageToken:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+tags:
+    - name: Evaluation
