@@ -65,7 +65,7 @@ jobs:
           report_paths: junit.xml
 
       - name: Publish Coverage Report
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: coverage.xml
           flags: unittests
