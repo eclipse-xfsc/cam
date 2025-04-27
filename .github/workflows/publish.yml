@@ -19,5 +19,8 @@ jobs:
     uses: eclipse-xfsc/dev-ops/.github/workflows/dockerbuild.yml@main
     with: 
       build_args: --file "cmd/${SERVICE}/Dockerfile" --build-arg SERVICE=${{ matrix.service }}
+      service: ${{ matrix.service }}
   helm:
     uses: eclipse-xfsc/dev-ops/.github/workflows/helm.yml@main
+    with: 
+      buildContext: "helm"
