@@ -18,9 +18,7 @@ jobs:
           cache: 'npm'
       - name: Build Dashboard
         run: | 
-            pushd dashboard
-            npm install && npm run build
-            popd
+            npm install ./dashboard && npm run build ./dashboard
 
   dockerbuild:
     needs: prebuild
