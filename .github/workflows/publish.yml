@@ -20,6 +20,15 @@ jobs:
             pushd dashboard
             npm install  && npm run build
             popd
+      - name: Go Build
+        run: |
+            go build cmd/cam-api-gateway/cam-api-gateway.go
+            go build cmd/cam-collection-authsec/cam-collection-authsec.go
+            go build cmd/cam-collection-integrity/cam-collection-integrity.go
+            go build cmd/cam-collection-workload/cam-collection-workload.go
+            go build cmd/cam-eval-manager/cam-eval-manager.go
+            go build cmd/cam-req-manager/cam-req-manager.go
+
 
   dockerbuild:
     needs: prebuild
