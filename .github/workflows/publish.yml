@@ -6,7 +6,24 @@ on:
   workflow_dispatch:
   
 jobs:
+  prebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Build Dashboard
+        run: | 
+            pushd dashboard
+            npm install && npm run build
+            popd
+
   dockerbuild:
+    needs: prebuild
     strategy:
       matrix:
         service: [  cam-api-gateway,
@@ -17,10 +34,8 @@ jobs:
                     cam-eval-manager,
                     cam-req-manager]
     uses: eclipse-xfsc/dev-ops/.github/workflows/dockerbuild.yml@main
+    secrets: inherit
     with: 
-      build_args: --file "cmd/${SERVICE}/Dockerfile" --build-arg SERVICE=${{ matrix.service }}
+      build_args: SERVICE=${{ matrix.service }}
       service: ${{ matrix.service }}
-  helm:
-    uses: eclipse-xfsc/dev-ops/.github/workflows/helm.yml@main
-    with: 
-      buildContext: "helm"
+      dockerfile: "cmd/${SERVICE}/Dockerfile"
