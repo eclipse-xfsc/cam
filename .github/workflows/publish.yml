@@ -17,7 +17,9 @@ jobs:
           node-version: 20
       - name: Build Dashboard
         run: | 
-            npm install ./dashboard && npm run build ./dashboard
+            pushd dashboard
+            npm install  && npm run build
+            popd
 
   dockerbuild:
     needs: prebuild
