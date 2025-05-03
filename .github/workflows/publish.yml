@@ -7,7 +7,6 @@ on:
   
 jobs:
   dockerbuild:
-    needs: prebuild
     strategy:
       matrix:
         service: [  cam-api-gateway,
