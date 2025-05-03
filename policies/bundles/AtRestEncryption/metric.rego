@@ -13,7 +13,7 @@
 # Contributors:
 #	Fraunhofer AISEC
 
-package gxfs.metrics.at_rest_encryption
+package xfsc.metrics.at_rest_encryption
 
 import data.clouditor.compare
 

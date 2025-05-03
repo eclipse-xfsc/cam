@@ -15,6 +15,7 @@ FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/server .
 # The ingress is not sending the intermediate certificate so we need to bring it along
+RUN apk add --no-cache ca-certificates
 ADD third_party/rapidssl.crt /usr/local/share/ca-certificates/rapidssl.crt
 RUN chmod 644 /usr/local/share/ca-certificates/rapidssl.crt && update-ca-certificates
 

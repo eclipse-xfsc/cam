@@ -136,7 +136,7 @@ func NewServer(opts ...service.ServiceOption[Server]) (srv *Server) {
 	// since the Requirements Manager implements the Clouditor Orchestrator interface.
 	srv.Service = cl_service_assessment.NewService(
 		cl_service_assessment.WithOrchestratorAddress(srv.reqManagerAddress.target, srv.reqManagerAddress.opts...),
-		cl_service_assessment.WithRegoPackageName("gxfs.metrics"),
+		cl_service_assessment.WithRegoPackageName("xfsc.metrics"),
 		cl_service_assessment.WithoutEvidenceStore(),
 		cl_service_assessment.WithAuthorizer(srv.authorizer),
 	)
@@ -421,7 +421,7 @@ func (srv *Server) calculateComplianceInternal(serviceID, controlID string) (com
 	return
 }
 
-// createEvaluationResult creates a GXFS evaluation result out of a Clouditor
+// createEvaluationResult creates a XFSC evaluation result out of a Clouditor
 // assessment result. In the future, we might merge the two concepts, but for
 // now unfortunately, we have to do it like this.
 func (srv *Server) createEvaluationResult(result *cl_api_assessment.AssessmentResult, err error) {

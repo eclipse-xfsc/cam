@@ -13,7 +13,7 @@
 # Contributors:
 #	Fraunhofer AISEC
 
-package gxfs.metrics.system_components_integrity
+package xfsc.metrics.system_components_integrity
 
 import data.clouditor.compare
 

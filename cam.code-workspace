@@ -18,7 +18,7 @@
 		"json.schemas": [
 			{
 				"fileMatch": [
-					"gxfs.json"
+					"xfsc.json"
 				],
 				"url": "https://raw.githubusercontent.com/usnistgov/OSCAL/main/json/schema/oscal_catalog_schema.json"
 			}

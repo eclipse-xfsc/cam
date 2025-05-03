@@ -171,7 +171,7 @@ func newReqManagerCommand() *cobra.Command {
 func doCmd(_ *cobra.Command, _ []string) (err error) {
 	var grpcOpts []grpc.ServerOption
 
-	log.Println("This is GXFS's Requirements Manager")
+	log.Println("This is XFSC's Requirements Manager")
 
 	// Check for in-memory database
 	if viper.GetBool(DBInMemoryFlag) {

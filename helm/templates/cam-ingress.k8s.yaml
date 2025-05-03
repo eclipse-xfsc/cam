@@ -5,11 +5,11 @@ metadata:
 spec:
   tls:
     - hosts:
-      - cam-{{ .Release.Name }}.gxfs.dev
-      secretName: wildcard-gxfs-dev
+      - cam-{{ .Release.Name }}.xfsc.dev
+      secretName: wildcard-xfsc-dev
   ingressClassName: nginx
   rules:
-    - host: cam-{{ .Release.Name }}.gxfs.dev
+    - host: cam-{{ .Release.Name }}.xfsc.dev
       http:
         paths:
         - path: /

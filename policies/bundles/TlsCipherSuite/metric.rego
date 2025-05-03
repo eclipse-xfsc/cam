@@ -13,7 +13,7 @@
 # Contributors:
 #	Fraunhofer AISEC
 
-package gxfs.metrics.tls_cipher_suite
+package xfsc.metrics.tls_cipher_suite
 
 import data.clouditor.isIn
 

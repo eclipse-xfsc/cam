@@ -13,7 +13,7 @@
 # Contributors:
 #	Fraunhofer AISEC
 
-package gxfs.metrics.tls_common_weaknesses
+package xfsc.metrics.tls_common_weaknesses
 
 import data.clouditor.isIn
 

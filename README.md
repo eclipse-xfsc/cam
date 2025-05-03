@@ -114,7 +114,7 @@ disabled (*enabled* is true or false).
 
 *metric.rego*:
 ```rego
-package gxfs.metrics.health_check
+package xfsc.metrics.health_check
 
 import data.clouditor.compare
 
@@ -144,7 +144,7 @@ compliant {
 #### Update OSCAL File
 
 We also need to update our catalog to include the newly created metric.
-The `./gxfs.json` file represents our catalog written in the [OSCAL](https://pages.nist.gov/OSCAL/) format.
+The `./xfsc.json` file represents our catalog written in the [OSCAL](https://pages.nist.gov/OSCAL/) format.
 If we decide that the metric is addressing the "System Hardening" control (for reasons of simplicity), we would add it to the list of current metrics in place (consisting of `SystemComponentsIntegrity`):
 ```json
 {
@@ -294,7 +294,7 @@ Note: The naming of the configuration in the Dashboard (`HealthCheckConfig`) has
 
 # Clarifications of the Specification
 
-This implementation follows closely the specification of the [Continuous Automated Monitoring](https://www.gxfs.eu/download/1731/) component of the Gaia-X Federated Services. However, there are minor clarifications to the specification that we chose because the specification was ambiguous or contradictory.
+This implementation follows closely the specification of the [Continuous Automated Monitoring](https://www.xfsc.eu/download/1731/) component of the Gaia-X Federated Services. However, there are minor clarifications to the specification that we chose because the specification was ambiguous or contradictory.
 
 ## General
 

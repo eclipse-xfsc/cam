@@ -13,7 +13,7 @@
 # Contributors:
 #	Fraunhofer AISEC
 
-package gxfs.metrics.tls_version
+package xfsc.metrics.tls_version
 
 import data.clouditor.compare
 import data.clouditor.isIn

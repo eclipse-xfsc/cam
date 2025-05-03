@@ -13,7 +13,7 @@
 # Contributors:
 #	Fraunhofer AISEC
 
-package gxfs.metrics.apio_auth_protected
+package xfsc.metrics.apio_auth_protected
 
 import data.clouditor.compare
 import data.clouditor.isIn

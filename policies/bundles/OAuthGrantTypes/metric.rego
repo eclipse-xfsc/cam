@@ -13,7 +13,7 @@
 # Contributors:
 #	Fraunhofer AISEC
 
-package gxfs.metrics.o_auth_grant_types
+package xfsc.metrics.o_auth_grant_types
 
 import data.clouditor.isIn
 

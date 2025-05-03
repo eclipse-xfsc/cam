@@ -24,7 +24,7 @@ spec:
           envFrom: [configMapRef: { name: cam-config }]
           env:
             - name: CAM_DB_HOST
-              value: fraunhofer-database1-postgres.gxfs-fraunhofer.svc.cluster.local
+              value: fraunhofer-database1-postgres.xfsc-fraunhofer.svc.cluster.local
             - name: CAM_DB_USER
               valueFrom:
                 secretKeyRef:

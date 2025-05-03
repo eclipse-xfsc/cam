@@ -24,7 +24,7 @@ function getYear() {
 
 <template>
   <div class="top">
-    <img src="/GXFS-white.png" style="width: 150px" />
+    <img src="/XFSC-white.png" style="width: 150px" />
   </div>
   <div class="bottom p-2">
     <p>Gaia-X Federation Services - Continuous Automated Monitoring</p>

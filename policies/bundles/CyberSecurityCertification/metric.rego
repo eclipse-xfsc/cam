@@ -13,7 +13,7 @@
 # Contributors:
 #	Fraunhofer AISEC
 
-package gxfs.metrics.cyber_security_certification
+package xfsc.metrics.cyber_security_certification
 
 import data.clouditor.compare
 

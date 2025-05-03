@@ -38,7 +38,7 @@ if (localStorage.getItem('testdata') == null) localStorage.setItem('testdata', '
 
 if (localStorage.getItem('localSiteURL') == null) localStorage.setItem('localSiteURL', 'http://localhost:3000')
 if (localStorage.getItem('localAPIURL') == null) localStorage.setItem('localAPIURL', 'http://localhost:8080')
-if (localStorage.getItem('prodURL') == null) localStorage.setItem('prodURL', 'https://cam.gxfs.dev')
+if (localStorage.getItem('prodURL') == null) localStorage.setItem('prodURL', 'https://cam.xfsc.dev')
 
 fetch("/config.json")
     .then((response) => response.json())

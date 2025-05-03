@@ -13,8 +13,8 @@ services:
     oauth2:
       authority: https://as.aisec.fraunhofer.de/auth
       clientID: gaiax-fs
-      redirectURI: https://cam.gxfs.dev/#/loggedin
-      postLogoutRedirectURI: https://cam.gxfs.dev/#/loggedout
+      redirectURI: https://cam.xfsc.dev/#/loggedin
+      postLogoutRedirectURI: https://cam.xfsc.dev/#/loggedout
   reqManager:
     oauth2:
       clientID: gaiax-fs-req

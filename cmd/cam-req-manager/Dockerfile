@@ -15,7 +15,7 @@ FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/server .
 
-COPY policies /app/server/policies
-COPY metrics.json /app/server/metrics.json
-COPY gxfs.json /app/server/gxfs.json
+COPY policies policies
+COPY metrics.json metrics.json
+COPY xfsc.json xfsc.json
 ENTRYPOINT ["./server"]
