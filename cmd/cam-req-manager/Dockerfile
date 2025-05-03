@@ -9,7 +9,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 COPY --from=frontend /app/dashboard/dist ./dashboard/dist
-RUN go build -o server cmd/cam-req-manager cam-req-manager/cam-req-manager cam-req-manager.go
+RUN go build -o server cmd/cam-req-manager/cam-req-manager.go
 
 FROM alpine:latest
 WORKDIR /app
