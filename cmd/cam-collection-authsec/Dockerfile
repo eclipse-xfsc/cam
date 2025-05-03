@@ -9,7 +9,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 COPY --from=frontend /app/dashboard/dist ./dashboard/dist
-RUN go build -o server cmd/cam-collection-authsecy/cam-collection-authsec.go
+RUN go build -o server cmd/cam-collection-authsec/cam-collection-authsec.go
 
 FROM alpine:latest
 WORKDIR /app
