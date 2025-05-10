@@ -28,12 +28,12 @@ require (
 // testing dependencies
 require (
 	github.com/cucumber/godog v0.12.5
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.2
 )
 
 // tool dependencies
 require (
-	github.com/boumenot/gocover-cobertura v1.2.0
+	github.com/boumenot/gocover-cobertura v1.3.0
 	github.com/google/addlicense v1.0.0
 	github.com/google/gnostic v0.6.9
 	github.com/jstemmer/go-junit-report v1.0.0
@@ -133,14 +133,14 @@ require (
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/yashtewari/glob-intersection v0.1.0 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
-	golang.org/x/mod v0.8.0 // indirect
-	golang.org/x/net v0.8.0 // indirect
+	golang.org/x/mod v0.10.0 // indirect
+	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.6.0 // indirect
-	golang.org/x/term v0.6.0 // indirect
-	golang.org/x/text v0.8.0 // indirect
+	golang.org/x/sys v0.7.0 // indirect
+	golang.org/x/term v0.7.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/time v0.0.0-20220210224613-90d013bbcef8 // indirect
-	golang.org/x/tools v0.6.0 // indirect
+	golang.org/x/tools v0.8.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
