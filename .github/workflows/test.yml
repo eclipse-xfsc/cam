@@ -45,7 +45,7 @@ jobs:
           $(go env GOPATH)/bin/gocover-cobertura < coverage.txt > coverage.xml
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-results
           path: |
