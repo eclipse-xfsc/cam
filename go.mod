@@ -8,7 +8,7 @@ require (
 	github.com/Fraunhofer-AISEC/cmc v0.4.0
 	github.com/go-co-op/gocron v1.17.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.6.0
 	github.com/gophercloud/gophercloud v0.25.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.0
